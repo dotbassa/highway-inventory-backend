@@ -1,0 +1,71 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: highway_inventory_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - highway_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: highway_inventory_api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    env_file:
+      - .env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - asset_photos:/var/highway-inventory/uploads/asset_photos
+      - conflictive_asset_photos:/var/highway-inventory/uploads/conflictive_asset_photos
+      - app_logs:/var/log/highway-inventory
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Esperando a la base de datos...' &&
+        echo 'Ejecutando migraciones...' &&
+        alembic upgrade head &&
+        echo 'Iniciando servidor API con 2 workers...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+      "
+    networks:
+      - highway_network
+
+networks:
+  highway_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: highway_inventory_postgres_data
+    driver: local
+  asset_photos:
+    name: highway_inventory_asset_photos
+    driver: local
+  conflictive_asset_photos:
+    name: highway_inventory_conflictive_asset_photos
+    driver: local
+  app_logs:
+    name: highway_inventory_app_logs
+    driver: local
