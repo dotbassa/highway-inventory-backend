@@ -121,4 +121,3 @@ This software is proprietary and confidential. Unauthorized copying, modificatio
 ---
 
 **Author**: Daniel Bassano
-# highway-inventory-backend
