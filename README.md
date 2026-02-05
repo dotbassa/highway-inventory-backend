@@ -71,8 +71,8 @@ The API includes auto-generated interactive documentation:
 
 This backend serves multiple client applications:
 
-- **React Frontend** (Web Dashboard): [GitHub Repository](https://github.com) _(link pending)_
-- **Mobile Application** (Field Data Collection): [GitHub Repository](https://github.com) _(link pending)_
+- **React Frontend** (Web Dashboard): [Frontend Repository](https://github.com/dotbassa/highway-inventory-frontend)
+- **Mobile Application** (Field Data Collection): [Mobile App Repository](https://github.com/dotbassa/highway-inventory-mobile-app)
 
 ## Development Setup
 
