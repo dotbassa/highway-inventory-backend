@@ -1,6 +1,6 @@
 # Highway Inventory Backend
 
-A production FastAPI backend for highway asset inventory management, developed as a freelance project for an organization modernizing their highway catalog infrastructure in collaboration with MOP (Ministerio de Obras Públicas de Chile). This system is currently deployed and actively serving field operations across various highway networks.
+A production FastAPI backend for highway asset inventory management, developed as a freelance project for an organization modernizing their highway catalog infrastructure in collaboration with MOP (Ministerio de Obras Públicas de Chile).
 
 ## Project Overview
 
@@ -107,10 +107,6 @@ docker-compose up -d
 # Check logs
 docker-compose logs -f api
 ```
-
-## Production Status
-
-**This project is currently in production** and actively used for highway infrastructure management. It is **not intended for public use or distribution**.
 
 ## License
 
